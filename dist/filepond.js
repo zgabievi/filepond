@@ -6486,7 +6486,6 @@
       if (!item) {
         failure({
           error: createResponse('error', 0, 'Item not found'),
-
           file: null
         });
 
@@ -6515,7 +6514,6 @@
       DID_SET_FILES: function DID_SET_FILES(_ref2) {
         var _ref2$value = _ref2.value,
           value = _ref2$value === void 0 ? [] : _ref2$value;
-
         // map values to file objects
         var files = value.map(function(file) {
           return {
@@ -6563,7 +6561,6 @@
 
       DID_UPDATE_ITEM_METADATA: function DID_UPDATE_ITEM_METADATA(_ref3) {
         var id = _ref3.id;
-
         // if is called multiple times in close succession we combined all calls together to save resources
         clearTimeout(state.itemUpdateTimeout);
         state.itemUpdateTimeout = setTimeout(function() {
@@ -6588,6 +6585,7 @@
                     dispatch('DID_PREPARE_OUTPUT', { id: id, file: file });
                   }
                 },
+
                 true
               );
             });
@@ -6610,6 +6608,7 @@
                   state.options.server.url,
                   state.options.server.revert
                 ),
+
                 query('GET_FORCE_REVERT')
               )
               .then(doUpload ? upload : function() {})
@@ -6645,6 +6644,7 @@
         index = limit(index, 0, state.items.length - 1);
         if (currentIndex === index) return;
         state.items.splice(index, 0, state.items.splice(currentIndex, 1)[0]);
+        dispatch('DID_REORDER_ITEMS', { items: getActiveItems(state.items) });
       },
 
       SORT: function SORT(_ref5) {
@@ -6660,7 +6660,6 @@
           success = _ref6$success === void 0 ? function() {} : _ref6$success,
           _ref6$failure = _ref6.failure,
           failure = _ref6$failure === void 0 ? function() {} : _ref6$failure;
-
         var currentIndex = index;
 
         if (index === -1 || typeof index === 'undefined') {
@@ -6711,12 +6710,10 @@
           failure = _ref7$failure === void 0 ? function() {} : _ref7$failure,
           _ref7$options = _ref7.options,
           options = _ref7$options === void 0 ? {} : _ref7$options;
-
         // if no source supplied
         if (isEmpty(source)) {
           failure({
             error: createResponse('error', 0, 'No source'),
-
             file: null
           });
 
@@ -6768,6 +6765,7 @@
                   state.options.server.url,
                   state.options.server.revert
                 ),
+
                 forceRevert
               )
               .then(function() {
@@ -6963,6 +6961,7 @@
                       loadComplete();
                     }
                   },
+
                   true
                 );
 
@@ -7021,6 +7020,7 @@
               main: dynamicLabel(state.options.labelFileProcessingRevertError)(
                 error
               ),
+
               sub: state.options.labelTapToRetry
             }
           });
@@ -7089,11 +7089,9 @@
           success = _ref9.success,
           _ref9$failure = _ref9.failure,
           failure = _ref9$failure === void 0 ? function() {} : _ref9$failure;
-
         // error response if item archived
         var err = {
           error: createResponse('error', 0, 'Item not found'),
-
           file: null
         };
 
@@ -7188,6 +7186,7 @@
             },
             failure: failure
           },
+
           true
         );
       }),
@@ -7227,6 +7226,7 @@
                   state.options.server.url,
                   state.options.server.revert
                 ),
+
                 query('GET_FORCE_REVERT')
               )
               .then(process)
@@ -7495,6 +7495,7 @@
               state.options.server.url,
               state.options.server.revert
             ),
+
             query('GET_FORCE_REVERT')
           )
           .then(function() {
@@ -11509,7 +11510,9 @@
 
       DID_UPDATE_ITEMS: createEvent('updatefiles'),
 
-      DID_ACTIVATE_ITEM: createEvent('activatefile')
+      DID_ACTIVATE_ITEM: createEvent('activatefile'),
+
+      DID_REORDER_ITEMS: createEvent('reorderitems')
     };
 
     var exposeEvent = function exposeEvent(event) {

@@ -4232,6 +4232,7 @@ const actions = (dispatch, query, state) => ({
     index = limit(index, 0, state.items.length - 1);
     if (currentIndex === index) return;
     state.items.splice(index, 0, state.items.splice(currentIndex, 1)[0]);
+    dispatch('DID_REORDER_ITEMS', { items: getActiveItems(state.items) });
   },
 
   SORT: ({ compare }) => {
@@ -8599,7 +8600,9 @@ const createApp = (initialOptions = {}) => {
 
     DID_UPDATE_ITEMS: createEvent('updatefiles'),
 
-    DID_ACTIVATE_ITEM: createEvent('activatefile')
+    DID_ACTIVATE_ITEM: createEvent('activatefile'),
+
+    DID_REORDER_ITEMS: createEvent('reorderitems')
   };
 
   const exposeEvent = event => {
